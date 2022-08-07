@@ -1,8 +1,9 @@
 package com.company.pieces;
 
-import com.company.Board;
-import com.company.Piece;
-import com.company.Square;
+import com.company.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Rook extends Piece {
 
@@ -25,5 +26,11 @@ public class Rook extends Piece {
         }
 
         return false;
+    }
+
+    @Override
+    public List<Move> legalMoves(Board board, Square currentSquare, Player player) {
+        List<Move> moves = new ArrayList<>();
+        return moves;
     }
 }

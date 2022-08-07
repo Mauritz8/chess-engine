@@ -1,5 +1,7 @@
 package com.company;
 
+import java.util.List;
+
 public abstract class Piece {
 
     private boolean killed = false;
@@ -31,4 +33,5 @@ public abstract class Piece {
     }
 
     public abstract boolean canMove(Board board, Square start, Square end);
+    public abstract List<Move> legalMoves(Board board, Square currentSquare, Player player);
 }

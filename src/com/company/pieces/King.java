@@ -1,8 +1,9 @@
 package com.company.pieces;
 
-import com.company.Board;
-import com.company.Piece;
-import com.company.Square;
+import com.company.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class King extends Piece {
 
@@ -56,5 +57,29 @@ public class King extends Piece {
         // check if the starting and
         // ending position are correct
         return true;
+    }
+
+    @Override
+    public List<Move> legalMoves(Board board, Square currentSquare, Player player) {
+        List<Move> moves  = new ArrayList<>();
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                if (dx != 0 || dy != 0) {
+                    int x = currentSquare.getX() + dx;
+                    int y = currentSquare.getY() + dy;
+                    Square newSquare = board.getSquare(x, y);
+                    if (newSquare != null) {
+                        if (newSquare.getPiece() != null) {
+                            if (newSquare.getPiece().isWhite() != player.isWhiteSide()) {
+                                moves.add(new Move(player, currentSquare, newSquare));
+                            }
+                        } else {
+                            moves.add(new Move(player, currentSquare, newSquare));
+                        }
+                    }
+                }
+            }
+        }
+        return moves;
     }
 }

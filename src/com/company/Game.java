@@ -82,4 +82,8 @@ public class Game {
 
         return true;
     }
+
+    public List<Move> getAllLegalMoves() {
+        return board.getLegalMoves(board.getAllSquaresWithPieces(), playerToMove);
+    }
 }

@@ -2,6 +2,9 @@ package com.company;
 
 import com.company.pieces.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Board {
 
     private Square[][] squares = new Square[8][8];
@@ -20,9 +23,9 @@ public class Board {
         this.resetBoard();
     }
 
-    public Square getSquare(int x, int y) throws Exception {
+    public Square getSquare(int x, int y) {
         if (x < 0 || x > 7 || y < 0 || y > 7) {
-            throw new Exception("Square does not exist");
+            return null;
         }
         return squares[y][x];
     }
@@ -64,5 +67,53 @@ public class Board {
 
     public Square[][] getSquares() {
         return squares;
+    }
+
+    public List<Piece> getAllPieces() {
+        List<Piece> pieces = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Piece piece = squares[i][j].getPiece();
+                if (piece != null) {
+                    pieces.add(piece);
+                }
+            }
+        }
+        return pieces;
+    }
+
+    public List<Square> getAllSquaresWithPieces() {
+        List<Square> squaresWithPieces = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Piece piece = squares[i][j].getPiece();
+                if (piece != null) {
+                    squaresWithPieces.add(squares[i][j]);
+                }
+            }
+        }
+        return squaresWithPieces;
+    }
+
+    public List<Move> getLegalMoves(List<Square> squaresWithPieces, Player player) {
+        List<Move> possibleMoves = new ArrayList<>();
+        for (Square square : squaresWithPieces) {
+            Piece piece = square.getPiece();
+            if (piece.isWhite() == player.isWhiteSide()) {
+                possibleMoves.addAll(piece.legalMoves(this, square, player));
+            }
+        }
+        return possibleMoves;
+    }
+
+    public Square getSquareWithNotation(String notation) throws Exception {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (SQUARES_NOTATIONS[i][j].equals(notation)) {
+                    return squares[i][j];
+                }
+            }
+        }
+        throw new Exception("No square with the notation " + notation);
     }
 }

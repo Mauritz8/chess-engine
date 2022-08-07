@@ -1,16 +1,26 @@
 package com.company;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Game game = new Game();
+        NotationHelper notationHelper = new NotationHelper();
+
         Player player1 = new Player("Mauritz", true);
         Player player2 = new Player("Martin", false);
         game.initialize(player1, player2);
 
         while (!game.gameEnded()) {
+
+            System.out.println("hej");
+            List<Move> legalMoves = game.getAllLegalMoves();
+            for (Move move : legalMoves) {
+                System.out.println("move: " + notationHelper.getAlgebraicNotation(move));
+            }
+
             printBoard(game.getBoard());
 
             Scanner scanner = new Scanner(System.in);
@@ -36,7 +46,9 @@ public class Main {
             Player playerToMove = game.getPlayerToMove();
             Square start = game.getBoard().getSquare(startX, startY);
             Square end = game.getBoard().getSquare(endX, endY);
-            game.makeMove(playerToMove, new Move(playerToMove, start, end));
+            Move move = new Move(playerToMove, start, end);
+            game.makeMove(playerToMove, move);
+            System.out.println("move notation: " + notationHelper.getAlgebraicNotation(move));
         }
     }
 
