@@ -72,14 +72,18 @@ public class Pawn extends Piece {
         }
 
         if (newSquare2 != null) {
-            if (newSquare2.getPiece() == null) {
-                moves.add(new Move(player, currentSquare, newSquare2));
+            if ( (currentSquare.getY() == 6 && player.isWhiteSide()) || (currentSquare.getY() == 1 && !player.isWhiteSide()) ) {
+                if (newSquare2.getPiece() == null) {
+                    moves.add(new Move(player, currentSquare, newSquare2));
+                }
             }
         }
 
         if (newSquare3 != null) {
             if (newSquare3.getPiece() != null && newSquare3.getPiece().isWhite() != player.isWhiteSide()) {
                 Move move = new Move(player, currentSquare, newSquare3);
+                newSquare3.getPiece().setKilled(true);
+                move.setPieceKilled(newSquare3.getPiece());
                 moves.add(move);
             }
         }
@@ -87,9 +91,9 @@ public class Pawn extends Piece {
         if (newSquare4 != null) {
             if (newSquare4.getPiece() != null && newSquare4.getPiece().isWhite() != player.isWhiteSide()) {
                 Move move = new Move(player, currentSquare, newSquare4);
-                moves.add(move);
                 newSquare4.getPiece().setKilled(true);
                 move.setPieceKilled(newSquare4.getPiece());
+                moves.add(move);
             }
         }
 
