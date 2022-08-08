@@ -95,6 +95,99 @@ public class Board {
         return squaresWithPieces;
     }
 
+    public List<Square> squaresUp(Square currentSquare) {
+        List<Square> squares = new ArrayList<>();
+        for (int dy = 1; dy < 8; dy++) {
+            int y = currentSquare.getY() + dy;
+            Square square = this.getSquare(currentSquare.getX(), y);
+            squares.add(square);
+        }
+        return squares;
+    }
+
+    public List<Square> squaresDown(Square currentSquare) {
+        List<Square> squares = new ArrayList<>();
+        for (int dy = -1; dy > -8; dy--) {
+            int y = currentSquare.getY() + dy;
+            Square square = this.getSquare(currentSquare.getX(), y);
+            squares.add(square);
+        }
+        return squares;
+    }
+
+    public List<Square> squaresRight(Square currentSquare) {
+        List<Square> squares = new ArrayList<>();
+        for (int dx = 1; dx < 8; dx++) {
+            int x = currentSquare.getX() + dx;
+            Square square = this.getSquare(x, currentSquare.getY());
+            squares.add(square);
+        }
+        return squares;
+    }
+
+    public List<Square> squaresLeft(Square currentSquare) {
+        List<Square> squares = new ArrayList<>();
+        for (int dx = -1; dx > -8; dx--) {
+            int x = currentSquare.getX() + dx;
+            Square square = this.getSquare(x, currentSquare.getY());
+            squares.add(square);
+        }
+        return squares;
+    }
+
+    public List<Square> squaresUpRight(Square currentSquare) {
+        List<Square> squares = new ArrayList<>();
+        for (int dx = 1; dx < 8; dx++) {
+            int dy = dx;
+
+            int x = currentSquare.getX() + dx;
+            int y = currentSquare.getY() + dy;
+            Square square = this.getSquare(x, y);
+            squares.add(square);
+        }
+        return squares;
+    }
+
+    public List<Square> squaresDownRight(Square currentSquare) {
+        List<Square> squares = new ArrayList<>();
+        for (int dx = 1; dx < 8; dx++) {
+            int dy = -dx;
+
+            int x = currentSquare.getX() + dx;
+            int y = currentSquare.getY() + dy;
+            Square square = this.getSquare(x, y);
+            squares.add(square);
+        }
+        return squares;
+    }
+
+    public List<Square> squaresUpLeft(Square currentSquare) {
+        List<Square> squares = new ArrayList<>();
+        for (int dx = -1; dx > -8; dx--) {
+            int dy = dx;
+
+            int x = currentSquare.getX() + dx;
+            int y = currentSquare.getY() + dy;
+            Square square = this.getSquare(x, y);
+            squares.add(square);
+        }
+        return squares;
+    }
+
+    public List<Square> squaresDownLeft(Square currentSquare) {
+        List<Square> squares = new ArrayList<>();
+        for (int dx = -1; dx > -8; dx--) {
+            int dy = -dx;
+
+            int x = currentSquare.getX() + dx;
+            int y = currentSquare.getY() + dy;
+            Square square = this.getSquare(x, y);
+            squares.add(square);
+        }
+        return squares;
+    }
+
+
     public List<Move> getLegalMoves(List<Square> squaresWithPieces, Player player) {
         List<Move> possibleMoves = new ArrayList<>();
         for (Square square : squaresWithPieces) {

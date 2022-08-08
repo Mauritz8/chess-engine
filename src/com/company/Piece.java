@@ -1,5 +1,6 @@
 package com.company;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Piece {
@@ -34,4 +35,27 @@ public abstract class Piece {
 
     public abstract boolean canMove(Board board, Square start, Square end);
     public abstract List<Move> legalMoves(Board board, Square currentSquare, Player player);
+
+
+    // legal moves in a specific direction for the pieces: bishop, rook, queen.
+    public List<Move> legalMovesOneDirection(Square currentSquare, Player player, List<Square> squaresInDirection) {
+        List<Move> moves = new ArrayList<>();
+        for (Square endSquare : squaresInDirection) {
+            if (endSquare != null && (endSquare.getPiece() == null || endSquare.getPiece().isWhite() != player.isWhiteSide())) {
+                Move move = new Move(player, currentSquare, endSquare);
+                moves.add(move);
+
+                // can't go through enemy piece
+                if (endSquare.getPiece() != null && endSquare.getPiece().isWhite() != player.isWhiteSide()) {
+                    endSquare.getPiece().setKilled(true);
+                    move.setPieceKilled(move.getEnd().getPiece());
+                    return moves;
+                }
+            } else {
+                return moves;
+            }
+        }
+        return moves;
+    }
+
 }

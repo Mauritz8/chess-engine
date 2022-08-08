@@ -47,6 +47,52 @@ public class Pawn extends Piece {
     @Override
     public List<Move> legalMoves(Board board, Square currentSquare, Player player) {
         List<Move> moves = new ArrayList<>();
+        Square newSquare1;
+        Square newSquare2;
+        Square newSquare3;
+        Square newSquare4;
+
+        if (player.isWhiteSide()) {
+            newSquare1 = board.getSquare(currentSquare.getX(), currentSquare.getY() - 1);
+            newSquare2 = board.getSquare(currentSquare.getX(), currentSquare.getY() - 2);
+            newSquare3 = board.getSquare(currentSquare.getX() - 1, currentSquare.getY() - 1);
+            newSquare4 = board.getSquare(currentSquare.getX() + 1, currentSquare.getY() - 1);
+        } else {
+            newSquare1 = board.getSquare(currentSquare.getX(), currentSquare.getY() + 1);
+            newSquare2 = board.getSquare(currentSquare.getX(), currentSquare.getY() + 2);
+            newSquare3 = board.getSquare(currentSquare.getX() - 1, currentSquare.getY() + 1);
+            newSquare4 = board.getSquare(currentSquare.getX() + 1, currentSquare.getY() + 1);
+        }
+
+
+        if (newSquare1 != null) {
+            if (newSquare1.getPiece() == null) {
+                moves.add(new Move(player, currentSquare, newSquare1));
+            }
+        }
+
+        if (newSquare2 != null) {
+            if (newSquare2.getPiece() == null) {
+                moves.add(new Move(player, currentSquare, newSquare2));
+            }
+        }
+
+        if (newSquare3 != null) {
+            if (newSquare3.getPiece() != null && newSquare3.getPiece().isWhite() != player.isWhiteSide()) {
+                Move move = new Move(player, currentSquare, newSquare3);
+                moves.add(move);
+            }
+        }
+
+        if (newSquare4 != null) {
+            if (newSquare4.getPiece() != null && newSquare4.getPiece().isWhite() != player.isWhiteSide()) {
+                Move move = new Move(player, currentSquare, newSquare4);
+                moves.add(move);
+                newSquare4.getPiece().setKilled(true);
+                move.setPieceKilled(newSquare4.getPiece());
+            }
+        }
+
         return moves;
     }
 }

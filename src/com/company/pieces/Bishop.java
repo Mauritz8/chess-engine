@@ -27,85 +27,13 @@ public class Bishop extends Piece {
         return false;
     }
 
-    private List<Square> squaresUpRight(Board board, Square currentSquare) {
-        List<Square> squares = new ArrayList<>();
-        for (int dx = 1; dx < 8; dx++) {
-            int dy = dx;
-
-            int x = currentSquare.getX() + dx;
-            int y = currentSquare.getY() + dy;
-            Square square = board.getSquare(x, y);
-            squares.add(square);
-        }
-        return squares;
-    }
-
-    private List<Square> squaresDownRight(Board board, Square currentSquare) {
-        List<Square> squares = new ArrayList<>();
-        for (int dx = 1; dx < 8; dx++) {
-            int dy = -dx;
-
-            int x = currentSquare.getX() + dx;
-            int y = currentSquare.getY() + dy;
-            Square square = board.getSquare(x, y);
-            squares.add(square);
-        }
-        return squares;
-    }
-
-    private List<Square> squaresUpLeft(Board board, Square currentSquare) {
-        List<Square> squares = new ArrayList<>();
-        for (int dx = -1; dx > -8; dx--) {
-            int dy = dx;
-
-            int x = currentSquare.getX() + dx;
-            int y = currentSquare.getY() + dy;
-            Square square = board.getSquare(x, y);
-            squares.add(square);
-        }
-        return squares;
-    }
-
-    private List<Square> squaresDownLeft(Board board, Square currentSquare) {
-        List<Square> squares = new ArrayList<>();
-        for (int dx = -1; dx > -8; dx--) {
-            int dy = -dx;
-
-            int x = currentSquare.getX() + dx;
-            int y = currentSquare.getY() + dy;
-            Square square = board.getSquare(x, y);
-            squares.add(square);
-        }
-        return squares;
-    }
-
-
-    private List<Move> legalMovesOneDirection(Square currentSquare, Player player, List<Square> squaresInDirection) {
-        List<Move> moves = new ArrayList<>();
-        for (Square endSquare : squaresInDirection) {
-            if (endSquare != null && (endSquare.getPiece() == null || endSquare.getPiece().isWhite() != player.isWhiteSide())) {
-                Move move = new Move(player, currentSquare, endSquare);
-                moves.add(move);
-
-                // can't go through enemy piece
-                if (endSquare.getPiece() != null && endSquare.getPiece().isWhite() != player.isWhiteSide()) {
-                    move.setPieceKilled(move.getEnd().getPiece());
-                    return moves;
-                }
-            } else {
-                return moves;
-            }
-        }
-        return moves;
-    }
-
     @Override
     public List<Move> legalMoves(Board board, Square currentSquare, Player player) {
         List<Move> moves = new ArrayList<>();
-        List<Move> movesUpRight = legalMovesOneDirection(currentSquare, player, squaresUpRight(board, currentSquare));
-        List<Move> movesDownRight = legalMovesOneDirection(currentSquare, player, squaresDownRight(board, currentSquare));
-        List<Move> movesUpLeft = legalMovesOneDirection(currentSquare, player, squaresUpLeft(board, currentSquare));
-        List<Move> movesDownLeft = legalMovesOneDirection(currentSquare, player, squaresDownLeft(board, currentSquare));
+        List<Move> movesUpRight = super.legalMovesOneDirection(currentSquare, player, board.squaresUpRight(currentSquare));
+        List<Move> movesDownRight = super.legalMovesOneDirection(currentSquare, player, board.squaresDownRight(currentSquare));
+        List<Move> movesUpLeft = super.legalMovesOneDirection(currentSquare, player, board.squaresUpLeft(currentSquare));
+        List<Move> movesDownLeft = super.legalMovesOneDirection(currentSquare, player, board.squaresDownLeft(currentSquare));
         moves.addAll(movesUpRight);
         moves.addAll(movesDownRight);
         moves.addAll(movesUpLeft);
