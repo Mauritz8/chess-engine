@@ -15,7 +15,6 @@ public class Main {
 
         while (!game.gameEnded()) {
 
-            System.out.println("hej");
             List<Move> legalMoves = game.getAllLegalMoves();
             for (Move move : legalMoves) {
                 System.out.println("move: " + notationHelper.getAlgebraicNotation(move));
@@ -24,13 +23,6 @@ public class Main {
             printBoard(game.getBoard());
 
             Scanner scanner = new Scanner(System.in);
-            boolean whiteToPlay = game.getPlayerToMove().isWhiteSide();
-            /*if (whiteToPlay) {
-                System.out.println("White to move: ");
-            }
-            else {
-                System.out.println("Black to move: ");
-            }*/
 
             //String moveNotation = scanner.nextLine();
             System.out.print("startX: ");

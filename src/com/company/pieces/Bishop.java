@@ -2,10 +2,7 @@ package com.company.pieces;
 
 import com.company.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Bishop extends Piece {
 
@@ -30,50 +27,73 @@ public class Bishop extends Piece {
         return false;
     }
 
-    private Map<Integer, List<Integer>> squaresInGivenDirection(int dxInitial, int dyInitial, int dxIncrease, int dyIncrease, int dxFinal, int dyFinal) {
-        Map<Integer, List<Integer>> squaresInGivenDirection = new HashMap<>();
-        int i = 0;
-        for (int dx = dxInitial; dx < 8; dx += dxIncrease) {
-            for (int dy = dyInitial; dy < 8; dy += dyIncrease) {
-                List<Integer> values = new ArrayList<>();
-                values.add(dx);
-                values.add(dy);
-                squaresInGivenDirection.put(i, values);
-            }
-        }
-        return squaresInGivenDirection;
-    }
+    private List<Square> squaresUpRight(Board board, Square currentSquare) {
+        List<Square> squares = new ArrayList<>();
+        for (int dx = 1; dx < 8; dx++) {
+            int dy = dx;
 
-    private List<Move> legalMovesOneDirectionTest(Board board, Square currentSquare, Player player, Map<Integer, List<Integer>> squaresInDirection) {
-        List<Move> moves = new ArrayList<>();
-        for (Integer key : squaresInDirection.keySet()) {
-            List values = squaresInDirection.get(key);
-            int dx = (int) values.get(0);
-            int dy = (int) values.get(1);
             int x = currentSquare.getX() + dx;
             int y = currentSquare.getY() + dy;
-            Square newSquare = board.getSquare(x, y);
-            if (newSquare != null && (newSquare.getPiece() == null || newSquare.getPiece().isWhite() != player.isWhiteSide())) {
-                moves.add(new Move(player, currentSquare, newSquare));
-            } else {
-                return moves;
-            }
+            Square square = board.getSquare(x, y);
+            squares.add(square);
         }
-        return moves;
+        return squares;
     }
 
-    private List<Move> legalMovesOneDirection(Board board, Square currentSquare, Player player) {
-        List<Move> moves = new ArrayList<>();
+    private List<Square> squaresDownRight(Board board, Square currentSquare) {
+        List<Square> squares = new ArrayList<>();
         for (int dx = 1; dx < 8; dx++) {
-            for (int dy = 1; dy < 8; dy++) {
-                int x = currentSquare.getX() + dx;
-                int y = currentSquare.getY() + dy;
-                Square newSquare = board.getSquare(x, y);
-                if (newSquare != null && (newSquare.getPiece() == null || newSquare.getPiece().isWhite() != player.isWhiteSide())) {
-                    moves.add(new Move(player, currentSquare, newSquare));
-                } else {
+            int dy = -dx;
+
+            int x = currentSquare.getX() + dx;
+            int y = currentSquare.getY() + dy;
+            Square square = board.getSquare(x, y);
+            squares.add(square);
+        }
+        return squares;
+    }
+
+    private List<Square> squaresUpLeft(Board board, Square currentSquare) {
+        List<Square> squares = new ArrayList<>();
+        for (int dx = -1; dx > -8; dx--) {
+            int dy = dx;
+
+            int x = currentSquare.getX() + dx;
+            int y = currentSquare.getY() + dy;
+            Square square = board.getSquare(x, y);
+            squares.add(square);
+        }
+        return squares;
+    }
+
+    private List<Square> squaresDownLeft(Board board, Square currentSquare) {
+        List<Square> squares = new ArrayList<>();
+        for (int dx = -1; dx > -8; dx--) {
+            int dy = -dx;
+
+            int x = currentSquare.getX() + dx;
+            int y = currentSquare.getY() + dy;
+            Square square = board.getSquare(x, y);
+            squares.add(square);
+        }
+        return squares;
+    }
+
+
+    private List<Move> legalMovesOneDirection(Square currentSquare, Player player, List<Square> squaresInDirection) {
+        List<Move> moves = new ArrayList<>();
+        for (Square endSquare : squaresInDirection) {
+            if (endSquare != null && (endSquare.getPiece() == null || endSquare.getPiece().isWhite() != player.isWhiteSide())) {
+                Move move = new Move(player, currentSquare, endSquare);
+                moves.add(move);
+
+                // can't go through enemy piece
+                if (endSquare.getPiece() != null && endSquare.getPiece().isWhite() != player.isWhiteSide()) {
+                    move.setPieceKilled(move.getEnd().getPiece());
                     return moves;
                 }
+            } else {
+                return moves;
             }
         }
         return moves;
@@ -82,14 +102,14 @@ public class Bishop extends Piece {
     @Override
     public List<Move> legalMoves(Board board, Square currentSquare, Player player) {
         List<Move> moves = new ArrayList<>();
-        List<Move> movesUpRight = legalMovesOneDirectionTest(board, currentSquare, player, squaresInGivenDirection(1, 1, 1, 1, 8, 8));
-        List<Move> movesDownRight = legalMovesOneDirectionTest(board, currentSquare, player, squaresInGivenDirection(1, -1, 1, -1, 8, -8));
-        List<Move> movesDownLeft = legalMovesOneDirectionTest(board, currentSquare, player, squaresInGivenDirection(-1, -1, -1, -1, -8, -8));
-        List<Move> movesUpLeft = legalMovesOneDirectionTest(board, currentSquare, player, squaresInGivenDirection(-1, 1, -1, 1, -8, 8));
+        List<Move> movesUpRight = legalMovesOneDirection(currentSquare, player, squaresUpRight(board, currentSquare));
+        List<Move> movesDownRight = legalMovesOneDirection(currentSquare, player, squaresDownRight(board, currentSquare));
+        List<Move> movesUpLeft = legalMovesOneDirection(currentSquare, player, squaresUpLeft(board, currentSquare));
+        List<Move> movesDownLeft = legalMovesOneDirection(currentSquare, player, squaresDownLeft(board, currentSquare));
         moves.addAll(movesUpRight);
         moves.addAll(movesDownRight);
-        moves.addAll(movesDownLeft);
         moves.addAll(movesUpLeft);
+        moves.addAll(movesDownLeft);
         return moves;
     }
 
