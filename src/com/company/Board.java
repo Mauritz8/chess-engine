@@ -86,6 +86,19 @@ public class Board {
         return pieces;
     }
 
+    public List<Piece> getPiecesForColor(boolean isWhite) {
+        List<Piece> pieces = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Piece piece = squares[i][j].getPiece();
+                if (piece != null && piece.isWhite() == isWhite) {
+                    pieces.add(piece);
+                }
+            }
+        }
+        return pieces;
+    }
+
     public List<Square> getAllSquaresWithPieces() {
         List<Square> squaresWithPieces = new ArrayList<>();
         for (int i = 0; i < 8; i++) {

@@ -2,6 +2,8 @@ package com.company;
 
 import com.company.pieces.Pawn;
 
+import java.util.List;
+
 public class NotationHelper {
 
     public String getAlgebraicNotation(Move move) {
@@ -20,34 +22,17 @@ public class NotationHelper {
         return moveNotation;
     }
 
-    // create move based on algebraic notation
+    // create move based on algebraic notation of move
     public Move getMoveFromNotation(Board board, String moveNotation, Player playerToMove) throws Exception {
-
-        //moveNotation = moveNotation.replace("x", "");
-
-        String endSquareNotation = moveNotation.substring(moveNotation.length() - 2);
-        Square endSquare = board.getSquareWithNotation(endSquareNotation);
-
-        if (moveNotation.charAt(0) > 60 && moveNotation.charAt(0) < 69) {
-            // it's a pawn move (e.g e4 or cxd5)
-
+        for (Piece piece : board.getPiecesForColor(playerToMove.isWhiteSide())) {
+            List<Move> legalMoves = piece.legalMoves(board, piece.findSquare(board), playerToMove);
+            for (Move move : legalMoves) {
+                if (getAlgebraicNotation(move).equals(moveNotation)) {
+                    return move;
+                }
+            }
         }
-
-        if (moveNotation.length() == 2) { // e4 for example
-            // must be a pawn
-            //String endSquare = moveNotation;
-        } else if (moveNotation.length() == 3) {
-
-        } else {
-            throw new Exception("Move notation is wrong");
-        }
-
-        int startX = 5;
-        int startY = 5;
-        int endX = 6;
-        int endY = 7;
-        Square start = board.getSquare(startX, startY);
-        Square end = board.getSquare(endX, endY);
-        return new Move(playerToMove, start, end);
+        throw new Exception("The move " + moveNotation + " can't be played");
     }
+
 }

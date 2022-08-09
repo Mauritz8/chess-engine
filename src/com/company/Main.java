@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Game game = new Game();
         NotationHelper notationHelper = new NotationHelper();
 
@@ -21,26 +21,14 @@ public class Main {
             }
 
             game.getBoard().print();
+            Player playerToMove = game.getPlayerToMove();
 
             Scanner scanner = new Scanner(System.in);
+            System.out.print("Move: ");
+            String moveNotation = scanner.nextLine();
+            Move move = notationHelper.getMoveFromNotation(game.getBoard(), moveNotation, playerToMove);
 
-            //String moveNotation = scanner.nextLine();
-            System.out.print("startX: ");
-            int startX = scanner.nextInt();
-            System.out.print("startY: ");
-            int startY = scanner.nextInt();
-            System.out.print("endX: ");
-            int endX = scanner.nextInt();
-            System.out.print("endY: ");
-            int endY = scanner.nextInt();
-
-
-            Player playerToMove = game.getPlayerToMove();
-            Square start = game.getBoard().getSquare(startX, startY);
-            Square end = game.getBoard().getSquare(endX, endY);
-            Move move = new Move(playerToMove, start, end);
             game.makeMove(playerToMove, move);
-            System.out.println("move notation: " + notationHelper.getAlgebraicNotation(move));
         }
     }
 }

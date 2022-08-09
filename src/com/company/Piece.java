@@ -33,6 +33,18 @@ public abstract class Piece {
         this.charRepresentation = charRepresentation;
     }
 
+    public Square findSquare(Board board) {
+        for (int y = 0; y < board.getSquares().length; y++)  {
+            for (int x = 0; x < board.getSquares().length; x++) {
+                Square square = board.getSquare(x, y);
+                if (square.getPiece() == this) {
+                    return square;
+                }
+            }
+        }
+        return null;
+    }
+
     public abstract boolean canMove(Board board, Square start, Square end);
     public abstract List<Move> legalMoves(Board board, Square currentSquare, Player player);
 

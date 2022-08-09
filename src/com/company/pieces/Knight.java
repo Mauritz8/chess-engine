@@ -39,7 +39,10 @@ public class Knight extends Piece {
             if (newSquare != null) { // square is inside board
                 if (newSquare.getPiece() != null) { // if there already is a piece on the new square
                     if (newSquare.getPiece().isWhite() != player.isWhiteSide()) { // you can't move to a square with a piece of you're color already on it
-                        moves.add(new Move(player, currentSquare, newSquare));
+                        Move move = new Move(player, currentSquare, newSquare);
+                        moves.add(move);
+                        newSquare.getPiece().setKilled(true);
+                        move.setPieceKilled(newSquare.getPiece());
                     }
                 } else {
                     moves.add(new Move(player, currentSquare, newSquare));
