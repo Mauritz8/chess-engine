@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Game game = new Game();
         NotationHelper notationHelper = new NotationHelper();
 
@@ -24,9 +24,15 @@ public class Main {
             Player playerToMove = game.getPlayerToMove();
 
             Scanner scanner = new Scanner(System.in);
-            System.out.print("Move: ");
-            String moveNotation = scanner.nextLine();
-            Move move = notationHelper.getMoveFromNotation(game.getBoard(), moveNotation, playerToMove);
+            Move move = null;
+            do {
+                System.out.print("Move: ");
+                String moveNotation = scanner.nextLine();
+                move = notationHelper.getMoveFromNotation(game.getBoard(), moveNotation, playerToMove);
+                if (move == null) {
+                    System.out.println("The move " + moveNotation + " can't be played!\nChoose another move:\n");
+                }
+            } while (move == null);
 
             game.makeMove(playerToMove, move);
         }
