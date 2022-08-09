@@ -7,11 +7,11 @@ public class Square {
     private Piece piece;
     private String algebraicNotation;
 
-    public Square(int y, int x, Piece piece, String algebraicNotation) {
+    public Square(int y, int x, Piece piece) {
         this.y = y;
         this.x = x;
         this.piece = piece;
-        this.algebraicNotation = algebraicNotation;
+        setAlgebraicNotation(y, x);
     }
 
     public int getX() {
@@ -32,5 +32,11 @@ public class Square {
 
     public String getAlgebraicNotation() {
         return algebraicNotation;
+    }
+
+    public void setAlgebraicNotation(int y, int x) {
+        int[] yNotations = {8, 7, 6, 5, 4, 3, 2, 1};
+        char[] xNotations = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+        algebraicNotation = new StringBuilder().append(xNotations[x]).append(yNotations[y]).toString();
     }
 }
