@@ -20,7 +20,7 @@ public class Main {
                 System.out.println("move: " + notationHelper.getAlgebraicNotation(move));
             }
 
-            printBoard(game.getBoard());
+            game.getBoard().print();
 
             Scanner scanner = new Scanner(System.in);
 
@@ -41,21 +41,6 @@ public class Main {
             Move move = new Move(playerToMove, start, end);
             game.makeMove(playerToMove, move);
             System.out.println("move notation: " + notationHelper.getAlgebraicNotation(move));
-        }
-    }
-
-    private static void printBoard(Board board) {
-        Square[][] squares = board.getSquares();
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                Piece piece = squares[i][j].getPiece();
-                if (piece != null) {
-                    System.out.print(piece.getCharRepresentation() + " ");
-                } else {
-                    System.out.print("- ");
-                }
-            }
-            System.out.println("\n");
         }
     }
 }
