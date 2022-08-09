@@ -48,8 +48,8 @@ public class King extends Piece {
 
         int deltaX = Math.abs(start.getX() - end.getX());
         int deltaY = Math.abs(start.getY() - end.getY());
-        if (deltaX + deltaY == 1) {
-            // also check if square is attacked by opponents piece, if so return false
+        if (deltaX <= 1 && deltaY <= 1) {
+            // todo: also check if square is attacked by opponents piece, if so return false
             return true;
         }
 
