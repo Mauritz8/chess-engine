@@ -15,7 +15,7 @@ public class Pawn extends Piece {
     @Override
     public boolean canMove(Board board, Square start, Square end) {
 
-        int deltaX = start.getX() - end.getX();
+        int deltaX = Math.abs(start.getX() - end.getX());
         int deltaY = start.getY() - end.getY();
 
         // consider en passant aswell
@@ -23,18 +23,20 @@ public class Pawn extends Piece {
         boolean canCapture;
         if (this.isWhite()) {
             if (start.getY() == 6) {
-                canMoveStraightUp = deltaX == 0 && (deltaY == 1 || deltaY == 2) && end.getPiece() == null;
+                canMoveStraightUp = deltaX == 0 && ( (deltaY == 1 && end.getPiece() == null) ||
+                        (deltaY == 2 && end.getPiece() == null && board.getSquare(end.getX(), end.getY() + 1).getPiece() == null) );
             } else {
                 canMoveStraightUp = deltaX == 0 && deltaY == 1 && end.getPiece() == null;
             }
             canCapture = deltaX == 1 && deltaY == 1 && end.getPiece() != null && end.getPiece().isWhite() != this.isWhite();
         } else {
             if (start.getY() == 1) {
-                canMoveStraightUp = deltaX == 0 && (deltaY == -1 || deltaY == -2) && end.getPiece() == null;
+                canMoveStraightUp = deltaX == 0 && ( (deltaY == -1 && end.getPiece() == null) ||
+                        (deltaY == -2 && end.getPiece() == null && board.getSquare(end.getX(), end.getY() - 1).getPiece() == null) );
             } else {
                 canMoveStraightUp = deltaX == 0 && deltaY == -1 && end.getPiece() == null;
             }
-            canCapture = deltaX == -1 && deltaY == -1 && end.getPiece().isWhite() != this.isWhite();
+            canCapture = deltaX == 1 && deltaY == -1 && end.getPiece().isWhite() != this.isWhite();
         }
 
         if (canMoveStraightUp || canCapture) {
@@ -72,8 +74,12 @@ public class Pawn extends Piece {
         }
 
         if (newSquare2 != null) {
-            if ( (currentSquare.getY() == 6 && player.isWhiteSide()) || (currentSquare.getY() == 1 && !player.isWhiteSide()) ) {
-                if (newSquare2.getPiece() == null) {
+            if (player.isWhiteSide() && currentSquare.getY() == 6) {
+                if (newSquare2.getPiece() == null && board.getSquare(newSquare2.getX(), newSquare2.getY() + 1).getPiece() == null) {
+                    moves.add(new Move(player, currentSquare, newSquare2));
+                }
+            } else if (!player.isWhiteSide() && currentSquare.getY() == 1) {
+                if (newSquare2.getPiece() == null && board.getSquare(newSquare2.getX(), newSquare2.getY() - 1).getPiece() == null) {
                     moves.add(new Move(player, currentSquare, newSquare2));
                 }
             }
