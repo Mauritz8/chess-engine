@@ -134,10 +134,11 @@ public class King extends Piece {
                     int y = currentSquare.getY() + dy;
                     Square newSquare = board.getSquare(x, y);
                     if (newSquare != null) {
-                        if (newSquare.getPiece() != null) {
-                            if (newSquare.getPiece().isWhite() != player.isWhiteSide()) {
-                                moves.add(new Move(player, currentSquare, newSquare));
-                            }
+                        if (newSquare.getPiece() != null && newSquare.getPiece().isWhite() != player.isWhiteSide()) {
+                            Move move = new Move(player, currentSquare, newSquare);
+                            newSquare.getPiece().setKilled(true);
+                            move.setPieceKilled(newSquare.getPiece());
+                            moves.add(move);
                         } else {
                             moves.add(new Move(player, currentSquare, newSquare));
                         }
