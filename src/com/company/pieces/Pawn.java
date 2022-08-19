@@ -36,7 +36,7 @@ public class Pawn extends Piece {
             } else {
                 canMoveStraightUp = deltaX == 0 && deltaY == -1 && end.getPiece() == null;
             }
-            canCapture = deltaX == 1 && deltaY == -1 && end.getPiece().isWhite() != this.isWhite();
+            canCapture = deltaX == 1 && deltaY == -1 && end.getPiece() != null && end.getPiece().isWhite() != this.isWhite();
         }
 
         if (canMoveStraightUp || canCapture) {
@@ -47,59 +47,33 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public List<Move> legalMoves(Board board, Square currentSquare, Player player) {
+    public List<Move> legalMoves(Game game, Square currentSquare) {
+        Board board = game.getBoard();
+        Player player = game.getPlayerToMove();
+
         List<Move> moves = new ArrayList<>();
-        Square newSquare1;
-        Square newSquare2;
-        Square newSquare3;
-        Square newSquare4;
 
+        Square[] newSquares = new Square[4];
         if (player.isWhiteSide()) {
-            newSquare1 = board.getSquare(currentSquare.getX(), currentSquare.getY() - 1);
-            newSquare2 = board.getSquare(currentSquare.getX(), currentSquare.getY() - 2);
-            newSquare3 = board.getSquare(currentSquare.getX() - 1, currentSquare.getY() - 1);
-            newSquare4 = board.getSquare(currentSquare.getX() + 1, currentSquare.getY() - 1);
+            newSquares[0] = board.getSquare(currentSquare.getX(), currentSquare.getY() - 1);
+            newSquares[1] = board.getSquare(currentSquare.getX(), currentSquare.getY() - 2);
+            newSquares[2] = board.getSquare(currentSquare.getX() - 1, currentSquare.getY() - 1);
+            newSquares[3] = board.getSquare(currentSquare.getX() + 1, currentSquare.getY() - 1);
         } else {
-            newSquare1 = board.getSquare(currentSquare.getX(), currentSquare.getY() + 1);
-            newSquare2 = board.getSquare(currentSquare.getX(), currentSquare.getY() + 2);
-            newSquare3 = board.getSquare(currentSquare.getX() - 1, currentSquare.getY() + 1);
-            newSquare4 = board.getSquare(currentSquare.getX() + 1, currentSquare.getY() + 1);
+            newSquares[0] = board.getSquare(currentSquare.getX(), currentSquare.getY() + 1);
+            newSquares[1] = board.getSquare(currentSquare.getX(), currentSquare.getY() + 2);
+            newSquares[2] = board.getSquare(currentSquare.getX() - 1, currentSquare.getY() + 1);
+            newSquares[3] = board.getSquare(currentSquare.getX() + 1, currentSquare.getY() + 1);
         }
 
 
-        if (newSquare1 != null) {
-            if (newSquare1.getPiece() == null) {
-                moves.add(new Move(player, currentSquare, newSquare1));
-            }
-        }
 
-        if (newSquare2 != null) {
-            if (player.isWhiteSide() && currentSquare.getY() == 6) {
-                if (newSquare2.getPiece() == null && board.getSquare(newSquare2.getX(), newSquare2.getY() + 1).getPiece() == null) {
-                    moves.add(new Move(player, currentSquare, newSquare2));
+        for (Square newSquare : newSquares) {
+            if (newSquare != null) {
+                Move move = new Move(player, currentSquare, newSquare);
+                if (move.isLegal(game)) {
+                    moves.add(move);
                 }
-            } else if (!player.isWhiteSide() && currentSquare.getY() == 1) {
-                if (newSquare2.getPiece() == null && board.getSquare(newSquare2.getX(), newSquare2.getY() - 1).getPiece() == null) {
-                    moves.add(new Move(player, currentSquare, newSquare2));
-                }
-            }
-        }
-
-        if (newSquare3 != null) {
-            if (newSquare3.getPiece() != null && newSquare3.getPiece().isWhite() != player.isWhiteSide()) {
-                Move move = new Move(player, currentSquare, newSquare3);
-                newSquare3.getPiece().setKilled(true);
-                move.setPieceKilled(newSquare3.getPiece());
-                moves.add(move);
-            }
-        }
-
-        if (newSquare4 != null) {
-            if (newSquare4.getPiece() != null && newSquare4.getPiece().isWhite() != player.isWhiteSide()) {
-                Move move = new Move(player, currentSquare, newSquare4);
-                newSquare4.getPiece().setKilled(true);
-                move.setPieceKilled(newSquare4.getPiece());
-                moves.add(move);
             }
         }
 

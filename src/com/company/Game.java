@@ -49,29 +49,12 @@ public class Game {
         this.status = status;
     }
 
-    public boolean makeMove(Player player, Move move) {
+    public void makeMove(Move move) {
+        Player player = move.getPlayer();
         Piece piece = move.getStart().getPiece();
 
-        if (piece == null) {
-            return false;
-        }
-
-        if (player != playerToMove) {
-            return false;
-        }
-
-        if (piece.isWhite() != player.isWhiteSide()) {
-            return false;
-        }
-
-        if (!piece.canMove(board, move.getStart(), move.getEnd())) {
-            return false;
-        }
-
-        Piece pieceAtEndSquare = move.getEnd().getPiece();
-        if (pieceAtEndSquare != null) {
-            pieceAtEndSquare.setKilled(true);
-            move.setPieceKilled(pieceAtEndSquare);
+        if (move.pieceWasKilled()) {
+            move.getEnd().getPiece().setKilled(true);
         }
 
         // check if rook moved from starting square,
@@ -98,6 +81,7 @@ public class Game {
             }
         }
 
+        // checks if it's a castling move, if it is it also moves the rook
         if (piece instanceof King) {
             King king = (King) piece;
             if (king.isValidCastlingKingside(board, move.getStart(), move.getEnd())) {
@@ -118,8 +102,6 @@ public class Game {
         } else {
             playerToMove = players[0];
         }
-
-        return true;
     }
 
     public void makeKingsideCastleRookMove(King king, Player player) {
@@ -134,6 +116,18 @@ public class Game {
         rookMove.getStart().setPiece(null);
     }
 
+    /*public void undoKingsideCastleRookMove(King king, Player player) {
+        Square kingStart = king.findSquare(board);
+        Square rookStart = board.getSquare(kingStart.getX() + 3, kingStart.getY());
+        Square rookEnd =  board.getSquare(rookStart.getX() - 2, rookStart.getY());
+        Rook rook = (Rook) rookStart.getPiece();
+        Move rookMove = new Move(player, rookStart, rookEnd);
+
+        movesPlayed.add(rookMove);
+        rookMove.getEnd().setPiece(rook);
+        rookMove.getStart().setPiece(null);
+    }*/
+
     public void makeQueensideCastleRookMove(King king, Player player) {
         Square kingStart = king.findSquare(board);
         Square rookStart = board.getSquare(kingStart.getX() - 4, kingStart.getY());
@@ -147,6 +141,62 @@ public class Game {
     }
 
     public List<Move> getAllLegalMoves() {
-        return board.getLegalMoves(board.getAllSquaresWithPieces(), playerToMove);
+        return board.getLegalMoves(this, board.getAllSquaresWithPieces());
     }
+
+    /*public void undoLastMove() {
+        Move move = movesPlayed.get(movesPlayed.size() - 1);
+        Player player = move.getPlayer();
+        Piece piece = move.getPieceMoved();
+
+        if (move.getPieceKilled() != null) {
+            move.getEnd().getPiece().setKilled(true);
+        }
+
+        // check if rook moved from starting square,
+        // if it did set the corresponding castling right to false (kingside or queenside)
+        if (piece instanceof Rook) {
+            if (piece.isWhite()) {
+                King whiteKing = (King) getBoard().getPiecesForColor(true).stream()
+                        .filter(p -> p.getClass().isAssignableFrom(King.class))
+                        .collect(Collectors.toList()).get(0);
+                if (move.getStart().getX() == 7 && move.getStart().getY() == 7) {
+                    whiteKing.setHasKingsideCastlingRight(true);
+                } else if (move.getStart().getX() == 0 && move.getStart().getY() == 7) {
+                    whiteKing.setHasQueensideCastlingRight(true);
+                }
+            } else {
+                King blackKing = (King) getBoard().getPiecesForColor(false).stream()
+                        .filter(p -> p.getClass().isAssignableFrom(King.class))
+                        .collect(Collectors.toList()).get(0);
+                if (move.getStart().getX() == 7 && move.getStart().getY() == 0) {
+                    blackKing.setHasKingsideCastlingRight(true);
+                } else if (move.getStart().getX() == 0 && move.getStart().getY() == 0) {
+                    blackKing.setHasQueensideCastlingRight(true);
+                }
+            }
+        }
+
+        // checks if it's a castling move, if it is it also moves the rook
+        if (piece instanceof King) {
+            King king = (King) piece;
+            if (king.isValidCastlingKingside(board, move.getStart(), move.getEnd())) {
+                makeKingsideCastleRookMove(king, player);
+            } else if (king.isValidCastlingQueenside(board, move.getStart(), move.getEnd())) {
+                makeQueensideCastleRookMove(king, player);
+            }
+            king.setHasKingsideCastlingRight(true);
+            king.setHasQueensideCastlingRight(true);
+        }
+        movesPlayed.remove(move);
+        move.getEnd().setPiece(move.getPieceKilled());
+        move.getStart().setPiece(piece);
+
+
+        if (playerToMove == players[0]) {
+            playerToMove = players[1];
+        } else {
+            playerToMove = players[0];
+        }
+    }*/
 }

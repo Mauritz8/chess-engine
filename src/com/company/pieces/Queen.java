@@ -33,16 +33,17 @@ public class Queen extends Piece {
     }
 
     @Override
-    public List<Move> legalMoves(Board board, Square currentSquare, Player player) {
+    public List<Move> legalMoves(Game game, Square currentSquare) {
+        Board board = game.getBoard();
         List<Move> moves = new ArrayList<>();
-        List<Move> movesUp = super.legalMovesOneDirection(currentSquare, player, board.squaresUp(currentSquare));
-        List<Move> movesDown = super.legalMovesOneDirection(currentSquare, player, board.squaresDown(currentSquare));
-        List<Move> movesRight = super.legalMovesOneDirection(currentSquare, player, board.squaresRight(currentSquare));
-        List<Move> movesLeft = super.legalMovesOneDirection(currentSquare, player, board.squaresLeft(currentSquare));
-        List<Move> movesUpRight = super.legalMovesOneDirection(currentSquare, player, board.squaresUpRight(currentSquare));
-        List<Move> movesDownRight = super.legalMovesOneDirection(currentSquare, player, board.squaresDownRight(currentSquare));
-        List<Move> movesUpLeft = super.legalMovesOneDirection(currentSquare, player, board.squaresUpLeft(currentSquare));
-        List<Move> movesDownLeft = super.legalMovesOneDirection(currentSquare, player, board.squaresDownLeft(currentSquare));
+        List<Move> movesUp = legalMovesOneDirection(game, currentSquare, board.squaresUp(currentSquare));
+        List<Move> movesDown = legalMovesOneDirection(game, currentSquare, board.squaresDown(currentSquare));
+        List<Move> movesRight = legalMovesOneDirection(game, currentSquare, board.squaresRight(currentSquare));
+        List<Move> movesLeft = legalMovesOneDirection(game, currentSquare, board.squaresLeft(currentSquare));
+        List<Move> movesUpRight = legalMovesOneDirection(game, currentSquare, board.squaresUpRight(currentSquare));
+        List<Move> movesDownRight = legalMovesOneDirection(game, currentSquare, board.squaresDownRight(currentSquare));
+        List<Move> movesUpLeft = legalMovesOneDirection(game, currentSquare, board.squaresUpLeft(currentSquare));
+        List<Move> movesDownLeft = legalMovesOneDirection(game, currentSquare, board.squaresDownLeft(currentSquare));
         moves.addAll(movesUp);
         moves.addAll(movesDown);
         moves.addAll(movesRight);

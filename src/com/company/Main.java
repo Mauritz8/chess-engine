@@ -21,20 +21,18 @@ public class Main {
             }
 
             game.getBoard().print();
-            Player playerToMove = game.getPlayerToMove();
 
             Scanner scanner = new Scanner(System.in);
             Move move = null;
             do {
                 System.out.print("Move: ");
                 String moveNotation = scanner.nextLine();
-                move = notationHelper.getMoveFromNotation(game.getBoard(), moveNotation, playerToMove);
+                move = notationHelper.getMoveFromNotation(game, moveNotation);
                 if (move == null) {
                     System.out.println("The move " + moveNotation + " can't be played!\nChoose another move:\n");
                 }
             } while (move == null);
-
-            game.makeMove(playerToMove, move);
+            game.makeMove(move);
         }
     }
 }

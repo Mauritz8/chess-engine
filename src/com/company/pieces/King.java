@@ -125,7 +125,10 @@ public class King extends Piece {
     }
 
     @Override
-    public List<Move> legalMoves(Board board, Square currentSquare, Player player) {
+    public List<Move> legalMoves(Game game, Square currentSquare) {
+        Board board = game.getBoard();
+        Player player = game.getPlayerToMove();
+
         List<Move> moves  = new ArrayList<>();
         for (int dx = -1; dx <= 1; dx++) {
             for (int dy = -1; dy <= 1; dy++) {

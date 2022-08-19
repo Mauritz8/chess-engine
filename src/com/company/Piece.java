@@ -46,23 +46,17 @@ public abstract class Piece {
     }
 
     public abstract boolean canMove(Board board, Square start, Square end);
-    public abstract List<Move> legalMoves(Board board, Square currentSquare, Player player);
+    public abstract List<Move> legalMoves(Game game, Square currentSquare);
 
 
     // legal moves in a specific direction for the pieces: bishop, rook, queen.
-    public List<Move> legalMovesOneDirection(Square currentSquare, Player player, List<Square> squaresInDirection) {
+    public List<Move> legalMovesOneDirection(Game game, Square currentSquare, List<Square> squaresInDirection) {
+        Player player = game.getPlayerToMove();
         List<Move> moves = new ArrayList<>();
         for (Square endSquare : squaresInDirection) {
-            if (endSquare != null && (endSquare.getPiece() == null || endSquare.getPiece().isWhite() != player.isWhiteSide())) {
-                Move move = new Move(player, currentSquare, endSquare);
+            Move move = new Move(player, currentSquare, endSquare);
+            if (move.isLegal(game)) {
                 moves.add(move);
-
-                // can't go through enemy piece
-                if (endSquare.getPiece() != null && endSquare.getPiece().isWhite() != player.isWhiteSide()) {
-                    endSquare.getPiece().setKilled(true);
-                    move.setPieceKilled(move.getEnd().getPiece());
-                    return moves;
-                }
             } else {
                 return moves;
             }

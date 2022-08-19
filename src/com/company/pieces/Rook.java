@@ -29,12 +29,13 @@ public class Rook extends Piece {
     }
 
     @Override
-    public List<Move> legalMoves(Board board, Square currentSquare, Player player) {
+    public List<Move> legalMoves(Game game, Square currentSquare) {
+        Board board = game.getBoard();
         List<Move> moves = new ArrayList<>();
-        List<Move> movesUp = super.legalMovesOneDirection(currentSquare, player, board.squaresUp(currentSquare));
-        List<Move> movesDown = super.legalMovesOneDirection(currentSquare, player, board.squaresDown(currentSquare));
-        List<Move> movesRight = super.legalMovesOneDirection(currentSquare, player, board.squaresRight(currentSquare));
-        List<Move> movesLeft = super.legalMovesOneDirection(currentSquare, player, board.squaresLeft(currentSquare));
+        List<Move> movesUp = legalMovesOneDirection(game, currentSquare, board.squaresUp(currentSquare));
+        List<Move> movesDown = legalMovesOneDirection(game, currentSquare, board.squaresDown(currentSquare));
+        List<Move> movesRight = legalMovesOneDirection(game, currentSquare, board.squaresRight(currentSquare));
+        List<Move> movesLeft = legalMovesOneDirection(game, currentSquare, board.squaresLeft(currentSquare));
         moves.addAll(movesUp);
         moves.addAll(movesDown);
         moves.addAll(movesRight);

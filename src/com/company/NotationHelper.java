@@ -36,9 +36,11 @@ public class NotationHelper {
     }
 
     // create move based on algebraic notation of move
-    public Move getMoveFromNotation(Board board, String moveNotation, Player playerToMove) {
+    public Move getMoveFromNotation(Game game, String moveNotation) {
+        Board board = game.getBoard();
+        Player playerToMove = game.getPlayerToMove();
         for (Piece piece : board.getPiecesForColor(playerToMove.isWhiteSide())) {
-            List<Move> legalMoves = piece.legalMoves(board, piece.findSquare(board), playerToMove);
+            List<Move> legalMoves = piece.legalMoves(game, piece.findSquare(board));
             for (Move move : legalMoves) {
                 if (getAlgebraicNotation(move).equals(moveNotation)) {
                     return move;

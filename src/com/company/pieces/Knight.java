@@ -25,7 +25,10 @@ public class Knight extends Piece {
     }
 
     @Override
-    public List<Move> legalMoves(Board board, Square currentSquare, Player player) {
+    public List<Move> legalMoves(Game game, Square currentSquare) {
+        Board board = game.getBoard();
+        Player player = game.getPlayerToMove();
+
         // All possible moves of a knight
         int[] dx = {2, 1, -1, -2, -2, -1, 1, 2};
         int[] dy = {1, 2, 2, 1, -1, -2, -2, -1};
@@ -36,17 +39,9 @@ public class Knight extends Piece {
             int y = currentSquare.getY() + dy[i];
 
             Square newSquare = board.getSquare(x, y);
-            if (newSquare != null) { // square is inside board
-                if (newSquare.getPiece() != null) { // if there already is a piece on the new square
-                    if (newSquare.getPiece().isWhite() != player.isWhiteSide()) { // you can't move to a square with a piece of you're color already on it
-                        Move move = new Move(player, currentSquare, newSquare);
-                        moves.add(move);
-                        newSquare.getPiece().setKilled(true);
-                        move.setPieceKilled(newSquare.getPiece());
-                    }
-                } else {
-                    moves.add(new Move(player, currentSquare, newSquare));
-                }
+            Move move = new Move(player, currentSquare, newSquare);
+            if (move.isLegal(game)) {
+                moves.add(move);
             }
         }
 

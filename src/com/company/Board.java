@@ -205,12 +205,13 @@ public class Board {
     }
 
 
-    public List<Move> getLegalMoves(List<Square> squaresWithPieces, Player player) {
+    public List<Move> getLegalMoves(Game game, List<Square> squaresWithPieces) {
+        Player player = game.getPlayerToMove();
         List<Move> possibleMoves = new ArrayList<>();
         for (Square square : squaresWithPieces) {
             Piece piece = square.getPiece();
             if (piece.isWhite() == player.isWhiteSide()) {
-                possibleMoves.addAll(piece.legalMoves(this, square, player));
+                possibleMoves.addAll(piece.legalMoves(game, square));
             }
         }
         return possibleMoves;

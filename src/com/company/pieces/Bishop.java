@@ -28,12 +28,13 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public List<Move> legalMoves(Board board, Square currentSquare, Player player) {
+    public List<Move> legalMoves(Game game, Square currentSquare) {
+        Board board = game.getBoard();
         List<Move> moves = new ArrayList<>();
-        List<Move> movesUpRight = super.legalMovesOneDirection(currentSquare, player, board.squaresUpRight(currentSquare));
-        List<Move> movesDownRight = super.legalMovesOneDirection(currentSquare, player, board.squaresDownRight(currentSquare));
-        List<Move> movesUpLeft = super.legalMovesOneDirection(currentSquare, player, board.squaresUpLeft(currentSquare));
-        List<Move> movesDownLeft = super.legalMovesOneDirection(currentSquare, player, board.squaresDownLeft(currentSquare));
+        List<Move> movesUpRight = legalMovesOneDirection(game, currentSquare, board.squaresUpRight(currentSquare));
+        List<Move> movesDownRight = legalMovesOneDirection(game, currentSquare, board.squaresDownRight(currentSquare));
+        List<Move> movesUpLeft = legalMovesOneDirection(game, currentSquare, board.squaresUpLeft(currentSquare));
+        List<Move> movesDownLeft = legalMovesOneDirection(game, currentSquare, board.squaresDownLeft(currentSquare));
         moves.addAll(movesUpRight);
         moves.addAll(movesDownRight);
         moves.addAll(movesUpLeft);
